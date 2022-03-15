@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "managed-service-fixtures"
+version = "0.1.0"
+description = "Pytest fixtures to manage external services such as Cockroach DB, Vault, or Redis"
+authors = ["Kafonek <matt.kafonek@noteable.io>"]
+license = "BSD-3"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
