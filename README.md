@@ -1,2 +1,10 @@
 # managed-service-fixtures
-Pytest fixtures for managed services in your tests, such as Cockroach DB, Vault, and Redis
+
+Testing Python applications that depend on external services such as a database, redis server, or storing data in Amazon S3 can be difficult. One solution is Unit testing: mock any kind of network IO and isolate tests to your application logic alone. With larger applications, you may find yourself in "mock hell" or discover that you're missing real-world bugs.
+
+`managed-service-fixtures` is designed to help you write Integration tests that require an external service be active. In the simplest case, where `pytest` is run serially and manages starting and stopping the service, then `managed-service-fixtures` is basically a wrapper around the excellent [mirakuru.py](https://github.com/ClearcodeHQ/mirakuru) library with some [Pydantic](https://pydantic-docs.helpmanual.io/) modeling for the service connection details. There are two common non-simple use cases this library addresses as well.
+
+The first non-simple use-case is running tests in parallel with `pytest-xdist`. A naive fixture that starts and stops a service with `mirakuru`, even if it were sessions coped, would end up creating one service for each worker. `managed-service-fixtures` addresses this situation by using `FileLock` and a state file that each worker registers itself in. Only one worker ends up being the manager, responsible for starting the service and then shutting it down once all other workers have unregistered themselves (completed their tests).
+
+The second non-simple use-case is managing services outside of the `pytest` fixtures. You might want to point your tests towards a service on a remote cluster. You might also want to stop `pytest` from tearing down a database after the tests complete so that you can introspect and debug what is in there. In those cases where you are manually starting and stopping services, you can set environment variables pointing to a file with connection details to those services, then the fixtures in `managed-service-fixtures` will not try to handle lifecycle management itself.
+
