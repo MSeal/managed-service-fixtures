@@ -6,7 +6,7 @@ authors = ["Noteable Engineering <engineering-backend@noteable.io>"]
 license = "BSD-3"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 pytest = "^7.1.0"
 mirakuru = "^2.4.2"
 pydantic = "^1.9.0"
