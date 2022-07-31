@@ -2,7 +2,6 @@ from typing import Callable, Tuple
 
 import mirakuru
 import pytest
-
 from managed_service_fixtures.base_manager import (
     ExternalServiceLifecycleManager,
     ServiceDetails,
@@ -31,7 +30,7 @@ class VaultManager(ExternalServiceLifecycleManager):
 
     env_file_pointer = "TEST_VAULT_DETAILS"
     json_state_file_name = "vault.json"
-    details_class = VaultDetails
+    service_details_class = VaultDetails
 
     def _start_service(self) -> Tuple[VaultDetails, mirakuru.Executor]:
         hostname = "localhost"

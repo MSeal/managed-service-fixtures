@@ -27,7 +27,7 @@ class RedisServiceManager(ExternalServiceLifecycleManager):
 
     env_file_pointer = "TEST_REDIS_DETAILS"
     json_state_file_name = "redis.json"
-    details_class = RedisDetails
+    service_details_class = RedisDetails
 
     def _start_service(self) -> Tuple[RedisDetails, mirakuru.Executor]:
         hostname = "localhost"

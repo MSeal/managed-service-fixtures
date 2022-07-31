@@ -2,7 +2,6 @@ from typing import Callable, Tuple
 
 import mirakuru
 import pytest
-
 from managed_service_fixtures.base_manager import (
     ExternalServiceLifecycleManager,
     ServiceDetails,
@@ -30,7 +29,7 @@ class MotoServiceManager(ExternalServiceLifecycleManager):
 
     env_file_pointer = "TEST_MOTO_DETAILS"
     json_state_file_name = "moto.json"
-    details_class = MotoDetails
+    service_details_class = MotoDetails
 
     def _start_service(self) -> Tuple[MotoDetails, mirakuru.Executor]:
         hostname = "localhost"

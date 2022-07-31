@@ -47,7 +47,7 @@ class CockroachManager(ExternalServiceLifecycleManager):
 
     env_file_pointer: str = "TEST_CRDB_DETAILS"
     json_state_file_name = "cockroachdb.json"
-    details_class = CockroachDetails
+    service_details_class = CockroachDetails
 
     def _start_service(self) -> Tuple[CockroachDetails, mirakuru.Executor]:
         sql_port = self.unused_tcp_port_factory()

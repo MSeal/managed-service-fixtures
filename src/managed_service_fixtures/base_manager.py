@@ -25,6 +25,7 @@ class ServiceDetails(BaseModel):
     """
 
     sessions: List[str] = Field(default_factory=list)
+    is_manager: bool = True
 
 
 class ExternalServiceLifecycleManager(abc.ABC):
@@ -113,7 +114,9 @@ class ExternalServiceLifecycleManager(abc.ABC):
         self.lock_file_path = pathlib.Path(str(self.state_file_path) + ".lock")
 
     @abc.abstractmethod
-    def _start_service(self) -> Tuple[ServiceDetails, mirakuru.Executor]:
+    def _start_service(
+        self, is_manager: bool
+    ) -> Tuple[ServiceDetails, mirakuru.Executor]:
         """
         Implement start-up logic using mirakuru and self.unused_tcp_port_factory.
 
@@ -125,9 +128,7 @@ class ExternalServiceLifecycleManager(abc.ABC):
         """
         raise NotImplementedError()
 
-    def __enter__(self) -> ServiceDetails:
-        # Check environment variables / class config to see if the service
-        # is being started outside of this class (e.g. a remote test cluster)
+    def _service_from_env(self):
         if self.env_file_pointer and os.environ.get(self.env_file_pointer):
             settings_file_path = pathlib.Path(os.environ[self.env_file_pointer])
             if settings_file_path.exists():
@@ -135,17 +136,24 @@ class ExternalServiceLifecycleManager(abc.ABC):
                     content = json.load(settings_file_contents)
                     service_details = self.service_details_class(**content)
                     self.configed_from_env = True
+                    return service_details
             else:
                 raise Exception(
                     f"Env variable {self.env_file_pointer} set but no file exists at {settings_file_path}"
                 )
 
+    def __enter__(self) -> ServiceDetails:
+        # Check environment variables / class config to see if the service
+        # is being started outside of this class (e.g. a remote test cluster)
+
         # Once we're here, we know we need to manage starting a process
         # and later stopping it in .__exit__.
         # If worker_id == 'master' then it means tests are serial and our
         # logic is going to be simple.
-        elif self.worker_id == "master":
-            service_details, self.mirakuru_process = self._start_service()
+        if self.worker_id == "master":
+            service_details = self._service_from_env()
+            if not service_details:
+                service_details, self.mirakuru_process = self._start_service()
 
         # Otherwise tests are in parallel and the logic is more complicated
         else:
@@ -155,10 +163,11 @@ class ExternalServiceLifecycleManager(abc.ABC):
                     # first to try and access it, so it becomes the manager among
                     # parallel pytest workers.
                     self.manage_process_lifecycle = True
-                    service_details, self.mirakuru_process = self._start_service()
+                    service_details = self._service_from_env()
+                    if not service_details:
+                        service_details, self.mirakuru_process = self._start_service()
 
                     state_file_dict = service_details.dict()
-
                     state_file_dict["sessions"] = []
                 else:
                     # If the lock file does exist, this worker needs to record
@@ -166,7 +175,9 @@ class ExternalServiceLifecycleManager(abc.ABC):
                     # it down until this instance has exited the context block
                     self.manage_process_lifecycle = False
                     state_file_dict = json.loads(self.state_file_path.read_text())
-                    service_details = self.service_details_class(**state_file_dict)
+                    service_details = self.service_details_class(
+                        is_manager=False, **state_file_dict
+                    )
 
                     # This is why ServiceDetails subclasses should not
                     # override or re-use the `sessions` field.
@@ -174,7 +185,9 @@ class ExternalServiceLifecycleManager(abc.ABC):
 
                 # Manager or not, serialize created or mutated state_file_dict
                 # to state_file_path while still holding the lockfile lock.
-                self.state_file_path.write_text(service_details.json())
+                self.state_file_path.write_text(
+                    service_details.json(exclude={"is_manager"})
+                )
 
         return service_details
 

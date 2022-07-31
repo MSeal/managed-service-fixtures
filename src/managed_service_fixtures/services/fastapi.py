@@ -27,7 +27,7 @@ class AppManager(ExternalServiceLifecycleManager):
     app_location_pointer: str = "TEST_APP_LOCATION"
     env_file_pointer: str = "TEST_APP_DETAILS"
     json_state_file_name = "asgi.json"
-    details_class = AppDetails
+    service_details_class = AppDetails
 
     def _start_service(self) -> Tuple[AppDetails, mirakuru.Executor]:
         hostname = "localhost"
