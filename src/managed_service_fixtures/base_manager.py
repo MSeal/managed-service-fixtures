@@ -193,7 +193,7 @@ class ExternalServiceLifecycleManager(abc.ABC):
 
     def __exit__(
         self,
-        exc_type: type[BaseException],
+        exc_type: Type[BaseException],
         exc_val: BaseException,
         exc_tb: TracebackType,
     ) -> None:

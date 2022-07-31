@@ -22,6 +22,8 @@ class AppManager(ExternalServiceLifecycleManager):
     you would set TEST_APP_LOCATION to "myapp.start:entrypoint".
 
     The default location to look for the app location is app.main:app.
+    Note: all environment variables of the parent process (pytest runner) automatically get pased
+    into the child process that mirakuru spawns.
     """
 
     app_location_pointer: str = "TEST_APP_LOCATION"
@@ -47,7 +49,7 @@ class AppManager(ExternalServiceLifecycleManager):
 
 
 @pytest.fixture(scope="session")
-def managed_fastapi_app(
+def managed_asgi_app(
     worker_id: str,
     tmp_path_factory: pytest.TempPathFactory,
     unused_tcp_port_factory: Callable[[], int],
