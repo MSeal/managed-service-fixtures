@@ -12,10 +12,17 @@ The second non-simple use-case is managing services outside of the `pytest` fixt
 
 # Example
 
+```python
+# tests/conftest.py
+# https://docs.pytest.org/en/7.1.x/how-to/fixtures.html#using-fixtures-from-other-projects
+
+pytest_plugins = 'managed_service_fixtures'
 ```
+
+```python
 # tests/test_vault.py
 import hvac
-from managed_service_fixtures import VaultDetails, managed_vault
+from managed_service_fixtures import VaultDetails
 
 
 def test_vault_connection(managed_vault: VaultDetails):
@@ -34,11 +41,14 @@ You may need to install a system library or CLI depending on which service you w
  - `managed_redis` starts a [Redis](https://redis.io/) server, See [install instructions](https://redis.io/docs/getting-started/installation/) to enable the `redis-server` CLI
  - `managed_vault` starts a [Vault](https://www.vaultproject.io/) server, see [install instructions](https://www.vaultproject.io/docs/install) to enable the `vault` CLI
 
-# FastAPI apps
+# ASGI apps
 
-`managed_fastapi_app` will run a FastAPI app with `uvicorn` as a managed service. You may want to use this if:
+`managed_asgi_app` will run an ASGI app (such as a [FastAPI](https://fastapi.tiangolo.com/) or [Starlette](https://www.starlette.io/) app) with `uvicorn` as a managed service. You may want to use this if:
  
- - You're using `httpx.AsyncClient` for [async tests](https://fastapi.tiangolo.com/advanced/async-tests/) and need to test websocket endpoints (not possible when httpx is consuming an asgi app)
- - You have a `websockets` application/library and need to spin up a test server to test request/responses
+ - You're using `httpx.AsyncClient` for [async tests](https://fastapi.tiangolo.com/advanced/async-tests/) and need to test websocket endpoints
+ - You have a `websockets` application/library and need to spin up a server to test request/responses
 
-Set an environment variable `TEST_APP_LOCATION` that `uvicorn` will use in its command line invocation. For instance, if you want to run a test app defined in `tests/app.py`, set `TEST_APP_LOCATION=tests.app:app` before the `managed_fastapi_app` fixture is invoked. A session-scoped `autouse=True` fixture will run before `managed_fastapi_app`.
+Set an environment variable `TEST_APP_LOCATION` that `uvicorn` will use in its command line invocation. For instance, if you want to run a test app defined in `tests/app.py`, set `TEST_APP_LOCATION=tests.app:app` before the `managed_fastapi_app` fixture is invoked. 
+
+All environment variables of the parent pytest process will get passed into the test app at fixture instantiation. If you need to set certain environment variables for the app to consume, you can use a session-scoped `autouse=True` fixture to define those before the `managed_asgi_app` fixture starts the app.
+
