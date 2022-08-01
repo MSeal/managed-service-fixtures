@@ -33,6 +33,7 @@ def fastapi_app(managed_asgi_app_factory: Callable[[str], AppManager]) -> AppDet
         yield app_details
 
 
+# Note you don't get breakpoint/debug support here...
 async def test_get(fastapi_app: AppDetails):
     async with httpx.AsyncClient(base_url=fastapi_app.url) as client:
         resp = await client.get("/")
@@ -46,3 +47,16 @@ async def test_ws(fastapi_app: AppDetails):
         resp = await websocket.recv()
         assert resp == "echo: Hello"
         await websocket.close()
+
+
+# Whereas you would get breakpoint/debug support in this setup
+@pytest.fixture
+async def client():
+    async with httpx.AsyncClient(app=app, base_url="http://test") as client:
+        yield client
+
+
+async def test_get_classic(client: httpx.AsyncClient):
+    resp = await client.get("/")
+    assert resp.status_code == 200
+    assert resp.json() == {"Hello": "World"}
