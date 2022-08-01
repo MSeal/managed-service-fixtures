@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "managed_service_fixtures"
-version = "0.1.1"
+version = "0.1.2"
 description = "Pytest fixtures to manage external services such as Cockroach DB, Vault, or Redis"
 authors = ["Noteable Engineering <engineering-backend@noteable.io>"]
 license = "BSD-3"
