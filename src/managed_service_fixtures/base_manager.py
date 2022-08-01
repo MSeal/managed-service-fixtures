@@ -8,8 +8,11 @@ from typing import Callable, List, Optional, Tuple, Type
 
 import mirakuru
 import pytest
+import structlog
 from filelock import FileLock
 from pydantic import BaseModel, Field
+
+logger = structlog.get_logger(__name__)
 
 
 class ServiceDetails(BaseModel):
@@ -146,8 +149,8 @@ class ExternalServiceLifecycleManager(abc.ABC):
                 self.configed_from_env = True
                 return service_details
             else:
-                raise Exception(
-                    f"Env variable {self.env_file_pointer} set but no file exists at {settings_file_path}"
+                logger.warn(
+                    f"Env variable {self.env_file_pointer} set but no file exists at {settings_file_path}. Starting new service."
                 )
 
     def __enter__(self) -> ServiceDetails:
