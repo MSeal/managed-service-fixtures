@@ -141,11 +141,10 @@ class ExternalServiceLifecycleManager(abc.ABC):
         if self.env_file_pointer and os.environ.get(self.env_file_pointer):
             settings_file_path = pathlib.Path(os.environ[self.env_file_pointer])
             if settings_file_path.exists():
-                with open(settings_file_path) as settings_file_contents:
-                    content = json.load(settings_file_contents)
-                    service_details = self.service_details_class(**content)
-                    self.configed_from_env = True
-                    return service_details
+                content = json.loads(settings_file_path.read_text())
+                service_details = self.service_details_class(**content)
+                self.configed_from_env = True
+                return service_details
             else:
                 raise Exception(
                     f"Env variable {self.env_file_pointer} set but no file exists at {settings_file_path}"

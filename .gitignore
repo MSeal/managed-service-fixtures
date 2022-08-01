@@ -1,3 +1,10 @@
+.vscode/
+
+# Some directories that might get created when using run-test-services script
+heap_profiler/
+goroutine_dump/
+inflight_trace_dump/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
