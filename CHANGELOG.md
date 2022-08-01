@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - When an env var is set for a service (e.g. `TEST_REDIS_DETAILS`), but no file exists, emit a warning instead of raising an exception
 
-## [0.1.2 - 2022-08-01]
+## [0.1.2] - 2022-08-01
 ### Added
 - tests for connecting to cockroach, redis, and vault
 - `run-test-services` script example
