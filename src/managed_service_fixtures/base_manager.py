@@ -4,7 +4,7 @@ import os
 import pathlib
 import time
 from types import TracebackType
-from typing import Callable, List, Tuple, Type
+from typing import Callable, List, Optional, Tuple, Type
 
 import mirakuru
 import pytest
@@ -73,6 +73,10 @@ class ExternalServiceLifecycleManager(abc.ABC):
         worker_id: str,
         tmp_path_factory: pytest.TempPathFactory,
         unused_tcp_port_factory: Callable[[], int],
+        # Optional overrides to cls attributes for factory fixture pattern
+        env_file_pointer: Optional[str] = None,
+        json_state_file_name: Optional[str] = None,
+        service_details_class: Optional[Type[ServiceDetails]] = None,
     ):
         """
         All three init arguments should be pulled in from pytest fixtures.
@@ -96,10 +100,15 @@ class ExternalServiceLifecycleManager(abc.ABC):
             ) as service_details:
                 yield service_details
         """
+        self.env_file_pointer = env_file_pointer or self.env_file_pointer
+        self.json_state_file_name = json_state_file_name or self.json_state_file_name
+        self.service_details_class = service_details_class or self.service_details_class
+
         self.mirakuru_process = None  # set in __enter__, used in __exit__
-        self.manage_process_lifecycle = False  # True when running in parallel
+        self.manage_process_lifecycle = False
+        # ^^ may get set to True during __enter__ when running in parallel
         self.configed_from_env = False
-        # ^^ True if service is being managed (start/stop) externally and
+        # ^^ gets set to True during __enter__ if service is being managed externally and
         # connection details are read from a file pointed at by environ variables
 
         self.worker_id = worker_id
