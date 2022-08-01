@@ -6,9 +6,9 @@ async def test_vault(managed_vault: VaultDetails):
     client = hvac.Client(url=managed_vault.url, token=managed_vault.token)
     assert client.is_authenticated()
 
-    assert "test-mount-path" not in client.sys.list_mounted_secrets_engines()
-
-    client.sys.enable_secrets_engine(backend_type="kv-v2", path="test-mount-path")
+    # The path may already exist if we're using an already started Vault (e.g. run-test-services)
+    if "test-mount-path/" not in client.sys.list_mounted_secrets_engines()["data"]:
+        client.sys.enable_secrets_engine(backend_type="kv-v2", path="test-mount-path")
 
     client.secrets.kv.v2.create_or_update_secret(
         path="test-mount-path", secret={"foo": "bar"}

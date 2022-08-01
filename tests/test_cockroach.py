@@ -11,7 +11,7 @@ class Base:
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
     name = sa.Column(sa.String)
     todos = sa.orm.relationship("Todo", back_populates="user")
 
@@ -19,17 +19,18 @@ class User(Base):
 class Todo(Base):
     __tablename__ = "todo"
     title = sa.Column(sa.String)
-    user_id = sa.Column(sa.Integer, sa.ForeignKey("user.id"))
+    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
     user = sa.orm.relationship("User", back_populates="todos")
 
 
 @pytest.fixture(scope="session", autouse=True)
 def configure_db(managed_cockroach: CockroachDetails):
     if managed_cockroach.is_manager:
-        engine = sa.create_engine(managed_cockroach.sync_dsn)
+        print(managed_cockroach.dict())
+        engine = sa.create_engine(managed_cockroach.sync_dsn, echo=True)
         Base.metadata.create_all(engine)
         yield
-        Base.metadata.drop_all(engine)
+        # Base.metadata.drop_all(engine)
         engine.dispose()
 
 
