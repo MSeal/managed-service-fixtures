@@ -1,0 +1,23 @@
+name: Install Vault
+description: Installs a specific version of Vault
+
+inputs:
+  version:
+    description: The version of Vault to install
+    required: false
+    type: string
+    default: 1.9.4
+
+runs:
+  using: composite
+  steps:
+    - name: Download Vault
+      shell: bash
+      run: |
+        wget https://releases.hashicorp.com/vault/${{ inputs.version }}/vault_${{ inputs.version }}_linux_amd64.zip -O /tmp/vault.zip
+        unzip /tmp/vault.zip
+    - name: Install Vault
+      shell: bash
+      run: |
+        chmod +x vault
+        sudo mv vault /usr/local/bin/

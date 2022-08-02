@@ -25,6 +25,12 @@ jobs:
         run: |
           poetry export -f requirements.txt --without-hashes --dev > /tmp/requirements.txt
           pip install --constraint=/tmp/requirements.txt nox_poetry
+      - name: Install Cockroach
+        uses: ./.github/actions/setup-cockroach
+      - name: Install Redis
+        uses: ./.github/actions/setup-redis
+      - name: Install Vault
+        uses: ./.github/actions/setup-vault
       - name: Run tests
         run: nox -s test-${{ matrix.python_version }}
       - name: Generate coverage XML
