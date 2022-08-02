@@ -1,8 +1,9 @@
 import pytest
 import sqlalchemy as sa
 import sqlalchemy.orm
-from managed_service_fixtures import CockroachDetails
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+
+from managed_service_fixtures import CockroachDetails
 
 
 @sa.orm.as_declarative()

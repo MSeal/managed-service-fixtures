@@ -1,5 +1,6 @@
 import aioredis
 import pytest
+
 from managed_service_fixtures import RedisDetails
 
 

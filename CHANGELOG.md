@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.3] - 2022-08-02
+### Added
+- Basic open source repo templates
+  - Nox for tests and linting
+  - Github action to run tests on PRs
+  - Github action for releasing to Pypi on tag
+  - Code of Conduct, Contributing, and Releasing docs
+
 ### Changed
 - When an env var is set for a service (e.g. `TEST_REDIS_DETAILS`), but no file exists, emit a warning instead of raising an exception
 

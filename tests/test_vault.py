@@ -1,4 +1,5 @@
 import hvac
+
 from managed_service_fixtures import VaultDetails
 
 

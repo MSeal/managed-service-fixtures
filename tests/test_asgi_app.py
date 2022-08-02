@@ -4,6 +4,7 @@ import httpx
 import pytest
 import websockets
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+
 from managed_service_fixtures import AppDetails
 from managed_service_fixtures.services.asgi_app import AppManager
 
