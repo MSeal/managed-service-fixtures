@@ -2,6 +2,7 @@ from typing import Callable, Tuple
 
 import mirakuru
 import pytest
+
 from managed_service_fixtures.base_manager import (
     ExternalServiceLifecycleManager,
     ServiceDetails,
