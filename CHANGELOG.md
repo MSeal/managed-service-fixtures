@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changed
 - Update pyproject.toml with readme / repository info
 
+## Removed
+- `structlog` dependency (all logging using vanilla `logging` now)
+
 ## [0.1.4] - 2022-08-03
 ### Added
 - Basic open source repo templates

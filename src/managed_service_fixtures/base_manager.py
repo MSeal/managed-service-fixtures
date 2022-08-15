@@ -1,5 +1,6 @@
 import abc
 import json
+import logging
 import os
 import pathlib
 import time
@@ -8,11 +9,10 @@ from typing import Callable, List, Optional, Tuple, Type
 
 import mirakuru
 import pytest
-import structlog
 from filelock import FileLock
 from pydantic import BaseModel, Field
 
-logger = structlog.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ServiceDetails(BaseModel):
