@@ -95,9 +95,6 @@ class LoggingTCPExecutor:
         return self.command.split()[0]
 
     def __enter__(self):
-        print("in enter")
-        print(self.connection_details)
-        print(self.executor)
         try:
             self.executor.__enter__()
         except mirakuru.ExecutorError as e:
