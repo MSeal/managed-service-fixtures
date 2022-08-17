@@ -8,6 +8,7 @@ the tests run.
 
 import contextlib
 import json
+import logging
 import pathlib
 import socket
 import subprocess
@@ -15,7 +16,6 @@ import tempfile
 from typing import Optional
 
 import mirakuru
-import structlog
 
 
 def find_free_port():
@@ -53,7 +53,7 @@ class LoggingTCPExecutor:
         subprocesses and log them all in the main process color coded by sub-process
         e.g. Vault logs in red, Cockroach logs in green, etc
         """
-        self.logger = structlog.get_logger(self.__class__.__name__)
+        self.logger = logging.getLogger(self.__class__.__name__)
         # XXX: tempfiles aren't getting cleaned up when a script is keyboard interrupted, not sure why.
         # For now the workaround is to call .unlink() in the __exit__ method
         with tempfile.NamedTemporaryFile(suffix=".json") as tmp_file:
@@ -95,9 +95,6 @@ class LoggingTCPExecutor:
         return self.command.split()[0]
 
     def __enter__(self):
-        print("in enter")
-        print(self.connection_details)
-        print(self.executor)
         try:
             self.executor.__enter__()
         except mirakuru.ExecutorError as e:

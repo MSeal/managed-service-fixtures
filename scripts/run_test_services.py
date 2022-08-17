@@ -1,12 +1,12 @@
 import contextlib
+import logging
 import time
 
 import click
-import structlog
 
 from managed_service_fixtures import LoggingTCPExecutor, find_free_port
 
-logger = structlog.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class MotoManager(LoggingTCPExecutor):
