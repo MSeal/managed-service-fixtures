@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-03-02
 ### Changed
 - Unpin `pytest-xdist` and `pytest-asyncio` for better comptaibility with other packages
 
