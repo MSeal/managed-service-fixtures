@@ -21,9 +21,12 @@ jobs:
         uses: daisylb/setup-nox@v2.1.0
       - name: Setup poetry
         uses: Gr1N/setup-poetry@v7
+        with:
+          poetry-version: "1.2.2"
       - name: Install dependencies
         run: |
-          poetry export -f requirements.txt --without-hashes --dev > /tmp/requirements.txt
+          poetry export -f requirements.txt --without-hashes --with dev > /tmp/requirements.txt
+          sed -i 's/\[.*\]//g' /tmp/requirements.txt
           pip install --constraint=/tmp/requirements.txt nox_poetry
       - name: Install Cockroach
         uses: ./.github/actions/setup-cockroach
@@ -46,9 +49,12 @@ jobs:
         uses: daisylb/setup-nox@v2.1.0
       - name: Setup poetry
         uses: Gr1N/setup-poetry@v7
+        with:
+          poetry-version: "1.2.2"
       - name: Install dependencies
         run: |
-          poetry export -f requirements.txt --without-hashes --dev > /tmp/requirements.txt
+          poetry export -f requirements.txt --without-hashes --with dev > /tmp/requirements.txt
+          sed -i 's/\[.*\]//g' /tmp/requirements.txt
           pip install --constraint=/tmp/requirements.txt nox_poetry
       - name: Run lint
         run: nox -s lint
