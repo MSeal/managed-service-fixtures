@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Callable, Tuple
 
 import mirakuru
@@ -9,6 +10,7 @@ from managed_service_fixtures.base_manager import (
 )
 
 
+@dataclass
 class CockroachDetails(ServiceDetails):
     hostname: str = "localhost"
     sql_port: int = 26257

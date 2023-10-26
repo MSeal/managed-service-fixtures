@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Callable, Optional, Tuple
 
 import mirakuru
@@ -9,6 +10,7 @@ from managed_service_fixtures.base_manager import (
 )
 
 
+@dataclass
 class AppDetails(ServiceDetails):
     hostname: str = "localhost"
     port: int = 8000

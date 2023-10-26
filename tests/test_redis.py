@@ -1,4 +1,4 @@
-import aioredis
+import redis.asyncio as aioredis
 import pytest
 
 from managed_service_fixtures import RedisDetails
