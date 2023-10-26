@@ -4,18 +4,19 @@ import logging
 import os
 import pathlib
 import time
+from dataclasses import dataclass, field
 from types import TracebackType
 from typing import Callable, List, Optional, Tuple, Type
 
 import mirakuru
 import pytest
 from filelock import FileLock
-from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
 
-class ServiceDetails(BaseModel):
+@dataclass
+class ServiceDetails:
     """
     Base class for service-specific connection details.
 
@@ -27,7 +28,7 @@ class ServiceDetails(BaseModel):
     shutdown of the service in parallel test execution
     """
 
-    sessions: List[str] = Field(default_factory=list)
+    sessions: List[str] = field(default_factory=list)
     is_manager: bool = True
 
 

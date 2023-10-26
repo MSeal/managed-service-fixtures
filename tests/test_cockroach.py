@@ -27,7 +27,6 @@ class Todo(Base):
 @pytest.fixture(scope="session", autouse=True)
 def configure_db(managed_cockroach: CockroachDetails):
     if managed_cockroach.is_manager:
-        print(managed_cockroach.dict())
         engine = sa.create_engine(managed_cockroach.sync_dsn, echo=True)
         Base.metadata.create_all(engine)
         yield

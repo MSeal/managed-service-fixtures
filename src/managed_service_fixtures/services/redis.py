@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Callable, Tuple
 
 import mirakuru
@@ -9,6 +10,7 @@ from managed_service_fixtures.base_manager import (
 )
 
 
+@dataclass
 class RedisDetails(ServiceDetails):
     hostname: str = "localhost"
     port: int = 6379

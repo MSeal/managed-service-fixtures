@@ -20,9 +20,8 @@ jobs:
       - name: Setup nox
         uses: daisylb/setup-nox@v2.1.0
       - name: Setup poetry
-        uses: Gr1N/setup-poetry@v7
-        with:
-          poetry-version: "1.2.2"
+        shell: bash
+        run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.5.1 python3 -
       - name: Install dependencies
         run: |
           poetry export -f requirements.txt --without-hashes --with dev > /tmp/requirements.txt
@@ -48,9 +47,8 @@ jobs:
       - name: Setup nox
         uses: daisylb/setup-nox@v2.1.0
       - name: Setup poetry
-        uses: Gr1N/setup-poetry@v7
-        with:
-          poetry-version: "1.2.2"
+        shell: bash
+        run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.5.1 python3 -
       - name: Install dependencies
         run: |
           poetry export -f requirements.txt --without-hashes --with dev > /tmp/requirements.txt
