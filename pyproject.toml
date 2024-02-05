@@ -27,7 +27,7 @@ hvac = "^0.11.2"
 SQLAlchemy = "^1.4.39"
 sqlalchemy-cockroachdb = "^1.4.3"
 psycopg2-binary = "^2.9.3"
-aioboto3 = "^9.6.0"
+aioboto3 = ">=9.6,<13.0"
 redis = "^5.0.1"
 moto = {extras = ["server"], version = "^3.1.16"}
 Faker = "^13.15.1"
